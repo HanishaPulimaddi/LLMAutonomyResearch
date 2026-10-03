@@ -1,0 +1,317 @@
+[
+  {
+    "id": "A01",
+    "category": "clearly_eligible",
+    "phd_award_date": "2023-07-15",
+    "interruptions": [],
+    "ground_truth_effective_date": "2023-07-15",
+    "ground_truth": true,
+    "reason": "PhD award date is after the 1 March 2021 threshold."
+  },
+  {
+    "id": "A02",
+    "category": "boundary_exact",
+    "phd_award_date": "2021-03-01",
+    "interruptions": [],
+    "ground_truth_effective_date": "2021-03-01",
+    "ground_truth": true,
+    "reason": "PhD award date falls exactly on the threshold."
+  },
+  {
+    "id": "A03",
+    "category": "boundary_before",
+    "phd_award_date": "2021-02-28",
+    "interruptions": [],
+    "ground_truth_effective_date": "2021-02-28",
+    "ground_truth": false,
+    "reason": "PhD award date is one day before the threshold and no extension applies."
+  },
+  {
+    "id": "A04",
+    "category": "single_interruption_boundary",
+    "phd_award_date": "2020-09-01",
+    "interruptions": [
+      {
+        "type": "unemployment",
+        "stated_months": 6,
+        "claimable_months": 6
+      }
+    ],
+    "ground_truth_effective_date": "2021-03-01",
+    "ground_truth": true,
+    "reason": "The six-month allowable interruption moves the effective date to the threshold."
+  },
+  {
+    "id": "A05",
+    "category": "non_research_concurrent_condition",
+    "phd_award_date": "2020-09-01",
+    "interruptions": [
+      {
+        "type": "non_research_position",
+        "stated_months": 5,
+        "claimable_months": 0,
+        "concurrent_with_research": true
+      }
+    ],
+    "ground_truth_effective_date": "2020-09-01",
+    "ground_truth": false,
+    "reason": "The non-research-position category applies only when the position is not concurrent with research employment, so this period is not claimable."
+  },
+  {
+    "id": "A06",
+    "category": "medical_condition",
+    "phd_award_date": "2020-01-15",
+    "interruptions": [
+      {
+        "type": "medical_condition",
+        "stated_months": 14,
+        "claimable_months": 14
+      }
+    ],
+    "ground_truth_effective_date": "2021-03-15",
+    "ground_truth": true,
+    "reason": "A 14-month allowable medical interruption moves the effective date beyond the threshold."
+  },
+  {
+    "id": "A07",
+    "category": "caring_responsibilities_boundary",
+    "phd_award_date": "2020-05-01",
+    "interruptions": [
+      {
+        "type": "caring_responsibilities",
+        "stated_months": 9,
+        "claimable_months": 9
+      }
+    ],
+    "ground_truth_effective_date": "2021-02-01",
+    "ground_truth": false,
+    "reason": "Nine months of interruption leaves the effective date before the threshold."
+  },
+  {
+    "id": "A08",
+    "category": "caring_responsibilities_boundary_exact",
+    "phd_award_date": "2020-05-01",
+    "interruptions": [
+      {
+        "type": "caring_responsibilities",
+        "stated_months": 10,
+        "claimable_months": 10
+      }
+    ],
+    "ground_truth_effective_date": "2021-03-01",
+    "ground_truth": true,
+    "reason": "Ten months of allowable interruption moves the effective date exactly to the threshold."
+  },
+  {
+    "id": "A09",
+    "category": "multiple_non_overlapping",
+    "phd_award_date": "2019-08-15",
+    "interruptions": [
+      {
+        "type": "parental_leave",
+        "stated_months": 6,
+        "claimable_months": 6
+      },
+      {
+        "type": "non_research_position",
+        "stated_months": 12,
+        "claimable_months": 12,
+        "concurrent_with_research": false
+      }
+    ],
+    "ground_truth_effective_date": "2021-02-15",
+    "ground_truth": false,
+    "reason": "The combined 18 months of non-overlapping allowable interruptions still leaves the effective date before the threshold."
+  },
+  {
+    "id": "A10",
+    "category": "multiple_non_overlapping_exact",
+    "phd_award_date": "2019-08-15",
+    "interruptions": [
+      {
+        "type": "parental_leave",
+        "stated_months": 7,
+        "claimable_months": 7
+      },
+      {
+        "type": "non_research_position",
+        "stated_months": 12,
+        "claimable_months": 12,
+        "concurrent_with_research": false
+      }
+    ],
+    "ground_truth_effective_date": "2021-03-15",
+    "ground_truth": true,
+    "reason": "The combined 19 months of allowable interruptions moves the effective date beyond the threshold."
+  },
+  {
+    "id": "A11",
+    "category": "international_relocation_cap",
+    "phd_award_date": "2020-08-01",
+    "interruptions": [
+      {
+        "type": "international_relocation",
+        "stated_months": 5,
+        "claimable_months": 3
+      }
+    ],
+    "ground_truth_effective_date": "2020-11-01",
+    "ground_truth": false,
+    "reason": "The five-month relocation is capped at three claimable months."
+  },
+  {
+    "id": "A12",
+    "category": "two_relocations",
+    "phd_award_date": "2020-06-01",
+    "interruptions": [
+      {
+        "type": "international_relocation",
+        "stated_months": 3,
+        "claimable_months": 3
+      },
+      {
+        "type": "international_relocation",
+        "stated_months": 3,
+        "claimable_months": 3
+      }
+    ],
+    "ground_truth_effective_date": "2020-12-01",
+    "ground_truth": false,
+    "reason": "Two relocations permit up to six months in total, leaving the effective date before the threshold."
+  },
+  {
+    "id": "A13",
+    "category": "primary_carer",
+    "phd_award_date": "2020-01-01",
+    "interruptions": [
+      {
+        "type": "primary_carer",
+        "stated_months": 24,
+        "claimable_months": 24,
+        "dependent_children": 1,
+        "includes_parental_leave_months": null
+      }
+    ],
+    "ground_truth_effective_date": "2022-01-01",
+    "ground_truth": true,
+    "reason": "One dependent child permits up to two years, inclusive of parental leave."
+  },
+  {
+    "id": "A14",
+    "category": "primary_carer_inclusive_parental_leave",
+    "phd_award_date": "2020-01-01",
+    "interruptions": [
+      {
+        "type": "primary_carer",
+        "stated_months": 24,
+        "claimable_months": 24,
+        "dependent_children": 1,
+        "includes_parental_leave_months": 12
+      }
+    ],
+    "ground_truth_effective_date": "2022-01-01",
+    "ground_truth": true,
+    "reason": "The total primary-carer allowance is two years; the 12 months of parental leave must not be double-counted."
+  },
+  {
+    "id": "A15",
+    "category": "multiple_children",
+    "phd_award_date": "2019-03-01",
+    "interruptions": [
+      {
+        "type": "primary_carer",
+        "stated_months": 24,
+        "claimable_months": 24,
+        "dependent_children": 1
+      },
+      {
+        "type": "primary_carer",
+        "stated_months": 24,
+        "claimable_months": 24,
+        "dependent_children": 1
+      }
+    ],
+    "ground_truth_effective_date": "2023-03-01",
+    "ground_truth": true,
+    "reason": "Two dependent children permit up to four years in total under the primary-carer provision."
+  },
+  {
+    "id": "A16",
+    "category": "primary_carer_exact_threshold",
+    "phd_award_date": "2019-03-01",
+    "interruptions": [
+      {
+        "type": "primary_carer",
+        "stated_months": 24,
+        "claimable_months": 24,
+        "dependent_children": 1
+      }
+    ],
+    "ground_truth_effective_date": "2021-03-01",
+    "ground_truth": true,
+    "reason": "One two-year primary-carer allowance moves the effective date exactly to the threshold."
+  },
+  {
+    "id": "A17",
+    "category": "overlap_should_not_double_count",
+    "phd_award_date": "2019-03-01",
+    "interruptions": [
+      {
+        "type": "primary_carer",
+        "stated_months": 24,
+        "claimable_months": 24,
+        "dependent_children": 1,
+        "includes_parental_leave_months": 18
+      }
+    ],
+    "ground_truth_effective_date": "2021-03-01",
+    "ground_truth": true,
+    "reason": "The 18 months of parental leave cannot be added to the two-year primary-carer allowance."
+  },
+  {
+    "id": "A18",
+    "category": "non_research_position",
+    "phd_award_date": "2020-03-01",
+    "interruptions": [
+      {
+        "type": "non_research_position",
+        "stated_months": 12,
+        "claimable_months": 12,
+        "concurrent_with_research": false
+      }
+    ],
+    "ground_truth_effective_date": "2021-03-01",
+    "ground_truth": true,
+    "reason": "The 12-month allowable non-research period moves the effective date to the threshold."
+  },
+  {
+    "id": "A19",
+    "category": "limited_access_to_facilities",
+    "phd_award_date": "2020-07-01",
+    "interruptions": [
+      {
+        "type": "limited_access_to_facilities",
+        "stated_months": 8,
+        "claimable_months": 8
+      }
+    ],
+    "ground_truth_effective_date": "2021-03-01",
+    "ground_truth": true,
+    "reason": "The eight-month post-PhD interruption is an eligible limited-access interruption and moves the effective date to the threshold."
+  },
+  {
+    "id": "A20",
+    "category": "disaster_recovery",
+    "phd_award_date": "2020-03-01",
+    "interruptions": [
+      {
+        "type": "disaster_management_and_recovery",
+        "stated_months": 11,
+        "claimable_months": 11
+      }
+    ],
+    "ground_truth_effective_date": "2021-02-01",
+    "ground_truth": false,
+    "reason": "The 11-month allowable interruption leaves the effective date one month before the threshold."
+  }
+]

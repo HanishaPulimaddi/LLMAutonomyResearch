@@ -1,0 +1,81 @@
+run_id,timestamp_utc,provider,model,applicant_id,architecture,prompt_name,prompt_version,prompt_sha256,system_prompt,user_prompt,raw_response,parsed_response,predicted_eligible,predicted_effective_date,status,error
+smoke-fa12901f,2026-10-03T03:22:33+00:00,groq,openai/gpt-oss-20b,A01,A,arch_a_llm_only,v1,28f5cd4d729eb35d9c75299d5fa28514f0d68df229bbef9ddebc6c982117a7f2,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Maya Chen was awarded her PhD in Computational Biology on 15 July 2023. She has had no career interruptions since the PhD was awarded.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","Dr Maya Chen’s PhD award date is 15 July 2023.  
+Since she has had no career interruptions after the award, no additional months are added.  
+The effective PhD award date remains 15 July 2023, which is after 1 March 2021, so she meets the eligibility criterion.
+
+DECISION: ELIGIBLE  
+EFFECTIVE_DATE: 2023-07-15","{""decision"": ""ELIGIBLE"", ""effective_date"": ""2023-07-15""}",True,2023-07-15,ok,
+smoke-f395be84,2026-10-03T03:22:38+00:00,groq,openai/gpt-oss-20b,A01,B,arch_b_llm_validation,v1,3ea6dafb3520ee75a72ef46d994e7a2e7d542b2451841ec0b4445ae0f629de7d,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Maya Chen was awarded her PhD in Computational Biology on 15 July 2023. She has had no career interruptions since the PhD was awarded.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":true,""effective_eligibility_date"":""2023-07-15"",""claimable_interruption_months"":0,""reasoning"":""No career interruptions; effective date 2023-07-15 is after 2021-03-01""}","{""eligible"": true, ""effective_eligibility_date"": ""2023-07-15"", ""claimable_interruption_months"": 0, ""reasoning"": ""No career interruptions; effective date 2023-07-15 is after 2021-03-01""}",True,2023-07-15,ok,
+smoke-ceb30fa6,2026-10-03T03:22:43+00:00,groq,openai/gpt-oss-20b,A01,C,arch_c_extraction,v1,0ea5d535574117ad3fc86f2f8b91f59f1d429edfa3d6c52754ea3161d6abb571,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Maya Chen was awarded her PhD in Computational Biology on 15 July 2023. She has had no career interruptions since the PhD was awarded.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2023-07-15"",""interruptions"":[]}","{""extracted_facts"": {""phd_award_date"": ""2023-07-15"", ""interruptions"": []}, ""rule_engine"": {""eligible"": true, ""effective_date"": ""2023-07-15"", ""claimable_months"": 0, ""notes"": []}}",True,2023-07-15,ok,

@@ -1,0 +1,2 @@
+architecture,applicant_id,case_category,gt_eligible,pred_eligible,gt_effective_date,pred_effective_date,date_error_months,error_category
+C,A10,multiple_non_overlapping_exact,True,False,2021-03-15,2020-08-15,-7,C: interruption attribute extraction error

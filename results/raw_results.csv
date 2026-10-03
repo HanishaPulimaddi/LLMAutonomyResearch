@@ -1,0 +1,1698 @@
+run_id,timestamp_utc,provider,model,applicant_id,architecture,prompt_name,prompt_version,prompt_sha256,system_prompt,user_prompt,raw_response,parsed_response,predicted_eligible,predicted_effective_date,status,error,rule_trace
+20261003T032528Z-6eba21,2026-10-03T03:25:30+00:00,groq,openai/gpt-oss-20b,A01,A,arch_a_llm_only,v1,28f5cd4d729eb35d9c75299d5fa28514f0d68df229bbef9ddebc6c982117a7f2,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Maya Chen was awarded her PhD in Computational Biology on 15 July 2023. She has had no career interruptions since the PhD was awarded.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD award date is 15 July 2023.  
+There are no career interruptions after the award, so no additional months are added.  
+Thus the effective PhD award date remains 15 July 2023, which is after 1 March 2021.  
+Therefore the applicant meets the eligibility criterion.
+
+DECISION: ELIGIBLE  
+EFFECTIVE_DATE: 2023-07-15","{""decision"": ""ELIGIBLE"", ""effective_date"": ""2023-07-15""}",True,2023-07-15,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:25:35+00:00,groq,openai/gpt-oss-20b,A01,B,arch_b_llm_validation,v1,3ea6dafb3520ee75a72ef46d994e7a2e7d542b2451841ec0b4445ae0f629de7d,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Maya Chen was awarded her PhD in Computational Biology on 15 July 2023. She has had no career interruptions since the PhD was awarded.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":true,""effective_eligibility_date"":""2023-07-15"",""claimable_interruption_months"":0,""reasoning"":""No career interruptions; effective date 2023-07-15 is after 2021-03-01""}","{""eligible"": true, ""effective_eligibility_date"": ""2023-07-15"", ""claimable_interruption_months"": 0, ""reasoning"": ""No career interruptions; effective date 2023-07-15 is after 2021-03-01""}",True,2023-07-15,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:25:39+00:00,groq,openai/gpt-oss-20b,A01,C,arch_c_extraction,v1,0ea5d535574117ad3fc86f2f8b91f59f1d429edfa3d6c52754ea3161d6abb571,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Maya Chen was awarded her PhD in Computational Biology on 15 July 2023. She has had no career interruptions since the PhD was awarded.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2023-07-15"",""interruptions"":[]}","{""extracted_facts"": {""phd_award_date"": ""2023-07-15"", ""interruptions"": []}, ""rule_engine"": {""eligible"": true, ""effective_date"": ""2023-07-15"", ""claimable_months"": 0, ""trace"": [""PhD award date: 2023-07-15"", ""No career interruptions extracted"", ""Total claimable months: 0"", ""Effective date: 2023-07-15 + 0 months = 2023-07-15"", ""2023-07-15 >= threshold 2021-03-01: ELIGIBLE""]}}",True,2023-07-15,ok,,"PhD award date: 2023-07-15
+No career interruptions extracted
+Total claimable months: 0
+Effective date: 2023-07-15 + 0 months = 2023-07-15
+2023-07-15 >= threshold 2021-03-01: ELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:25:44+00:00,groq,openai/gpt-oss-20b,A02,A,arch_a_llm_only,v1,06c1421e31c95e71c43c4c0e40adea86a3cd9948f659e747904d2b6e2ac18d8a,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Liam Patel was awarded his PhD on 1 March 2021. He has had no career interruptions since the PhD was awarded.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD award date is 1 March 2021.  
+Since there have been no career interruptions after the award, no additional months are added.  
+Thus the effective PhD award date remains 1 March 2021, which is on or after the eligibility threshold of 1 March 2021.  
+Therefore the applicant is eligible.
+
+DECISION: ELIGIBLE  
+EFFECTIVE_DATE: 2021-03-01","{""decision"": ""ELIGIBLE"", ""effective_date"": ""2021-03-01""}",True,2021-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:25:48+00:00,groq,openai/gpt-oss-20b,A02,B,arch_b_llm_validation,v1,80199c36607d45d23fc2766eb146bde3fedb16aafb0f15386099371a6c3b9e5a,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Liam Patel was awarded his PhD on 1 March 2021. He has had no career interruptions since the PhD was awarded.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":true,""effective_eligibility_date"":""2021-03-01"",""claimable_interruption_months"":0,""reasoning"":""No career interruptions after PhD, so effective date equals award date, which meets the 1 March 2021 threshold.""}","{""eligible"": true, ""effective_eligibility_date"": ""2021-03-01"", ""claimable_interruption_months"": 0, ""reasoning"": ""No career interruptions after PhD, so effective date equals award date, which meets the 1 March 2021 threshold.""}",True,2021-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:25:53+00:00,groq,openai/gpt-oss-20b,A02,C,arch_c_extraction,v1,462917141798adf1405f28ece594cd56ed1d49523315c09fc3b5a379cc0c107a,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Liam Patel was awarded his PhD on 1 March 2021. He has had no career interruptions since the PhD was awarded.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2021-03-01"",""interruptions"":[]}","{""extracted_facts"": {""phd_award_date"": ""2021-03-01"", ""interruptions"": []}, ""rule_engine"": {""eligible"": true, ""effective_date"": ""2021-03-01"", ""claimable_months"": 0, ""trace"": [""PhD award date: 2021-03-01"", ""No career interruptions extracted"", ""Total claimable months: 0"", ""Effective date: 2021-03-01 + 0 months = 2021-03-01"", ""2021-03-01 >= threshold 2021-03-01: ELIGIBLE""]}}",True,2021-03-01,ok,,"PhD award date: 2021-03-01
+No career interruptions extracted
+Total claimable months: 0
+Effective date: 2021-03-01 + 0 months = 2021-03-01
+2021-03-01 >= threshold 2021-03-01: ELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:25:58+00:00,groq,openai/gpt-oss-20b,A03,A,arch_a_llm_only,v1,b0d80aec572b9ab54c468d795cf812320cd408ca629fbe527cc88226ef53300b,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Sofia Nguyen was awarded her PhD on 28 February 2021. She has had no career interruptions since the PhD was awarded.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD award date is 28 February 2021. Since there have been no career interruptions after the award, no additional months are added. Thus the effective PhD award date remains 28 February 2021, which is before the eligibility threshold of 1 March 2021. Therefore the applicant is not eligible.
+
+DECISION: INELIGIBLE
+EFFECTIVE_DATE: 2021-02-28","{""decision"": ""INELIGIBLE"", ""effective_date"": ""2021-02-28""}",False,2021-02-28,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:26:02+00:00,groq,openai/gpt-oss-20b,A03,B,arch_b_llm_validation,v1,6f90a3a046831672744ae00110eb4d4f3460018dadc4f33b084520824cd5d384,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Sofia Nguyen was awarded her PhD on 28 February 2021. She has had no career interruptions since the PhD was awarded.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":false,""effective_eligibility_date"":""2021-02-28"",""claimable_interruption_months"":0,""reasoning"":""No career interruptions after PhD, effective date before 1 March 2021""}","{""eligible"": false, ""effective_eligibility_date"": ""2021-02-28"", ""claimable_interruption_months"": 0, ""reasoning"": ""No career interruptions after PhD, effective date before 1 March 2021""}",False,2021-02-28,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:26:07+00:00,groq,openai/gpt-oss-20b,A03,C,arch_c_extraction,v1,fad72dda445e771c268e54d772079a0f856aede740df7cb51a991aa3310bec19,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Sofia Nguyen was awarded her PhD on 28 February 2021. She has had no career interruptions since the PhD was awarded.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2021-02-28"",""interruptions"":[]}","{""extracted_facts"": {""phd_award_date"": ""2021-02-28"", ""interruptions"": []}, ""rule_engine"": {""eligible"": false, ""effective_date"": ""2021-02-28"", ""claimable_months"": 0, ""trace"": [""PhD award date: 2021-02-28"", ""No career interruptions extracted"", ""Total claimable months: 0"", ""Effective date: 2021-02-28 + 0 months = 2021-02-28"", ""2021-02-28 < threshold 2021-03-01: INELIGIBLE""]}}",False,2021-02-28,ok,,"PhD award date: 2021-02-28
+No career interruptions extracted
+Total claimable months: 0
+Effective date: 2021-02-28 + 0 months = 2021-02-28
+2021-02-28 < threshold 2021-03-01: INELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:26:12+00:00,groq,openai/gpt-oss-20b,A04,A,arch_a_llm_only,v1,67693420b4f57281bb83d3f00dbdd78f1f29700f2b9093934c46f91cb01ee963,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Noah Williams was awarded his PhD on 1 September 2020. After the PhD, he had a six-month period of unemployment that did not overlap with any other interruption.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","Dr. Noah Williams received his PhD on 1 September 2020. He had a six‑month period of unemployment after the award, which is an allowable interruption. Adding six calendar months to the award date gives an effective PhD award date of 1 March 2021, which is on or after the eligibility threshold of 1 March 2021. Therefore, the applicant meets the eligibility criteria.
+
+DECISION: ELIGIBLE
+EFFECTIVE_DATE: 2021-03-01","{""decision"": ""ELIGIBLE"", ""effective_date"": ""2021-03-01""}",True,2021-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:26:16+00:00,groq,openai/gpt-oss-20b,A04,B,arch_b_llm_validation,v1,268c0c37d29a4cfe0e0d293b4bd12502cb061451ce78360cd4388e6ce0e95af7,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Noah Williams was awarded his PhD on 1 September 2020. After the PhD, he had a six-month period of unemployment that did not overlap with any other interruption.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":true,""effective_eligibility_date"":""2021-03-01"",""claimable_interruption_months"":6,""reasoning"":""Six-month unemployment after PhD extends award date to 1 March 2021, meeting the eligibility threshold.""}","{""eligible"": true, ""effective_eligibility_date"": ""2021-03-01"", ""claimable_interruption_months"": 6, ""reasoning"": ""Six-month unemployment after PhD extends award date to 1 March 2021, meeting the eligibility threshold.""}",True,2021-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:26:21+00:00,groq,openai/gpt-oss-20b,A04,C,arch_c_extraction,v1,09b90f366e5792694a8be713abe2ed2849f635402e2c5226ad114cd729b7a367,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Noah Williams was awarded his PhD on 1 September 2020. After the PhD, he had a six-month period of unemployment that did not overlap with any other interruption.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2020-09-01"",""interruptions"":[{""type"":""unemployment"",""duration_months"":6,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":null,""within_primary_carer_period"":null}]}","{""extracted_facts"": {""phd_award_date"": ""2020-09-01"", ""interruptions"": [{""type"": ""unemployment"", ""duration_months"": 6, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": null, ""within_primary_carer_period"": null}]}, ""rule_engine"": {""eligible"": true, ""effective_date"": ""2021-03-01"", ""claimable_months"": 6, ""trace"": [""PhD award date: 2020-09-01"", ""Interruption 1 (unemployment, 6 months stated): allowable; counted in full -> 6 claimable"", ""Total claimable months: 6"", ""Effective date: 2020-09-01 + 6 months = 2021-03-01"", ""2021-03-01 >= threshold 2021-03-01: ELIGIBLE""]}}",True,2021-03-01,ok,,"PhD award date: 2020-09-01
+Interruption 1 (unemployment, 6 months stated): allowable; counted in full -> 6 claimable
+Total claimable months: 6
+Effective date: 2020-09-01 + 6 months = 2021-03-01
+2021-03-01 >= threshold 2021-03-01: ELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:26:26+00:00,groq,openai/gpt-oss-20b,A05,A,arch_a_llm_only,v1,c55eb09b81af175a020ea64d49019ce1ce443e088d151929b0adcc6eb474fb4b,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Aisha Rahman was awarded her PhD on 1 September 2020. After conferral, she worked for five months in a non-research position, but continued her research employment concurrently throughout that period.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD was awarded on 1 September 2020.  
+She worked for five months in a non‑research position, but she continued her research employment concurrently throughout that period.  
+Because the non‑research position was concurrent with research employment, it does **not** qualify as an allowable career interruption.  
+Thus no additional months are added to the award date, so the effective PhD award date remains 1 September 2020, which is before the eligibility threshold of 1 March 2021.
+
+DECISION: INELIGIBLE
+EFFECTIVE_DATE: 2020-09-01","{""decision"": ""INELIGIBLE"", ""effective_date"": ""2020-09-01""}",False,2020-09-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:26:30+00:00,groq,openai/gpt-oss-20b,A05,B,arch_b_llm_validation,v1,71f9a621179ae7fe21c76663c02761b1138e3b651a58b2eae5505d406055fbac,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Aisha Rahman was awarded her PhD on 1 September 2020. After conferral, she worked for five months in a non-research position, but continued her research employment concurrently throughout that period.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":false,""effective_eligibility_date"":""2020-09-01"",""claimable_interruption_months"":0,""reasoning"":""Non‑research employment was concurrent with research work, so it does not count as an allowable interruption.""}","{""eligible"": false, ""effective_eligibility_date"": ""2020-09-01"", ""claimable_interruption_months"": 0, ""reasoning"": ""Non‑research employment was concurrent with research work, so it does not count as an allowable interruption.""}",False,2020-09-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:26:35+00:00,groq,openai/gpt-oss-20b,A05,C,arch_c_extraction,v1,2bec6a1b80431d6cb83fda0527fa0b7e27f4799daba8400ad1ef93bac6337967,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Aisha Rahman was awarded her PhD on 1 September 2020. After conferral, she worked for five months in a non-research position, but continued her research employment concurrently throughout that period.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2020-09-01"",""interruptions"":[{""type"":""non_research_position"",""duration_months"":5,""after_phd"":true,""concurrent_with_research_employment"":true,""dependent_children"":null,""within_primary_carer_period"":null}]}","{""extracted_facts"": {""phd_award_date"": ""2020-09-01"", ""interruptions"": [{""type"": ""non_research_position"", ""duration_months"": 5, ""after_phd"": true, ""concurrent_with_research_employment"": true, ""dependent_children"": null, ""within_primary_carer_period"": null}]}, ""rule_engine"": {""eligible"": false, ""effective_date"": ""2020-09-01"", ""claimable_months"": 0, ""trace"": [""PhD award date: 2020-09-01"", ""Interruption 1 (non_research_position, 5 months stated): concurrent with research employment; not counted -> 0 claimable"", ""Total claimable months: 0"", ""Effective date: 2020-09-01 + 0 months = 2020-09-01"", ""2020-09-01 < threshold 2021-03-01: INELIGIBLE""]}}",False,2020-09-01,ok,,"PhD award date: 2020-09-01
+Interruption 1 (non_research_position, 5 months stated): concurrent with research employment; not counted -> 0 claimable
+Total claimable months: 0
+Effective date: 2020-09-01 + 0 months = 2020-09-01
+2020-09-01 < threshold 2021-03-01: INELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:26:40+00:00,groq,openai/gpt-oss-20b,A06,A,arch_a_llm_only,v1,b9cd9bff427c7b856f02e5bc2e6359bad9c9abf93452ff7ea40c54eb81a27d33,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Ethan Brooks was awarded his PhD on 15 January 2020. He subsequently had a 14-month period of recovery from a medical condition. The interruption occurred after PhD conferral and did not overlap with another interruption.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD was awarded on 15 January 2020.  
+He had a 14‑month recovery period from a medical condition that began after the PhD and did not overlap any other interruption.  
+Since “recovery from a medical condition” is an allowable interruption, we add 14 calendar months to the award date:  
+
+15 January 2020 + 12 months = 15 January 2021  
+15 January 2021 + 2 months = 15 March 2021  
+
+Thus the effective PhD award date is **15 March 2021**, which is on or after 1 March 2021.  
+Therefore the applicant is eligible.
+
+DECISION: ELIGIBLE  
+EFFECTIVE_DATE: 2021-03-15","{""decision"": ""ELIGIBLE"", ""effective_date"": ""2021-03-15""}",True,2021-03-15,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:26:45+00:00,groq,openai/gpt-oss-20b,A06,B,arch_b_llm_validation,v1,f2120bd9bbfa53073889acc2a6c9fd43c9bdeb01e862135913852b26b332c5ce,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Ethan Brooks was awarded his PhD on 15 January 2020. He subsequently had a 14-month period of recovery from a medical condition. The interruption occurred after PhD conferral and did not overlap with another interruption.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":true,""effective_eligibility_date"":""2021-03-15"",""claimable_interruption_months"":14,""reasoning"":""14-month medical recovery after PhD conferral extends effective date to 15 March 2021, which is after 1 March 2021.""}","{""eligible"": true, ""effective_eligibility_date"": ""2021-03-15"", ""claimable_interruption_months"": 14, ""reasoning"": ""14-month medical recovery after PhD conferral extends effective date to 15 March 2021, which is after 1 March 2021.""}",True,2021-03-15,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:26:50+00:00,groq,openai/gpt-oss-20b,A06,C,arch_c_extraction,v1,a07111f5f6c2115a90c947ce61f24d6b64cbded6c1417acd30104432371372f4,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Ethan Brooks was awarded his PhD on 15 January 2020. He subsequently had a 14-month period of recovery from a medical condition. The interruption occurred after PhD conferral and did not overlap with another interruption.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2020-01-15"",""interruptions"":[{""type"":""medical_condition"",""duration_months"":14,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":null,""within_primary_carer_period"":null}]}","{""extracted_facts"": {""phd_award_date"": ""2020-01-15"", ""interruptions"": [{""type"": ""medical_condition"", ""duration_months"": 14, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": null, ""within_primary_carer_period"": null}]}, ""rule_engine"": {""eligible"": true, ""effective_date"": ""2021-03-15"", ""claimable_months"": 14, ""trace"": [""PhD award date: 2020-01-15"", ""Interruption 1 (medical_condition, 14 months stated): allowable; counted in full -> 14 claimable"", ""Total claimable months: 14"", ""Effective date: 2020-01-15 + 14 months = 2021-03-15"", ""2021-03-15 >= threshold 2021-03-01: ELIGIBLE""]}}",True,2021-03-15,ok,,"PhD award date: 2020-01-15
+Interruption 1 (medical_condition, 14 months stated): allowable; counted in full -> 14 claimable
+Total claimable months: 14
+Effective date: 2020-01-15 + 14 months = 2021-03-15
+2021-03-15 >= threshold 2021-03-01: ELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:26:54+00:00,groq,openai/gpt-oss-20b,A07,A,arch_a_llm_only,v1,fc6413a1f5c9d54a12b2d994340a8d2457c26cbbd327da12ddb316b73468dc11,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Priya Nair was awarded her PhD on 1 May 2020. She subsequently had nine months of caring responsibilities for a dependent family member. The interruption was after PhD conferral and did not overlap with another interruption.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD was awarded on 1 May 2020. She had a nine‑month caring‑responsibilities interruption after the award, which is an allowable interruption. Adding nine calendar months to the award date gives an effective PhD award date of 1 February 2021. Since this date is before the eligibility threshold of 1 March 2021, the applicant is not eligible.
+
+DECISION: INELIGIBLE  
+EFFECTIVE_DATE: 2021-02-01","{""decision"": ""INELIGIBLE"", ""effective_date"": ""2021-02-01""}",False,2021-02-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:26:59+00:00,groq,openai/gpt-oss-20b,A07,B,arch_b_llm_validation,v1,91cbb84064a904fa0ad4c426b6fc06b7b17f7c62638766597092edf5d493ec08,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Priya Nair was awarded her PhD on 1 May 2020. She subsequently had nine months of caring responsibilities for a dependent family member. The interruption was after PhD conferral and did not overlap with another interruption.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":false,""effective_eligibility_date"":""2021-02-01"",""claimable_interruption_months"":9,""reasoning"":""Effective date 1 Feb 2021 is before the 1 Mar 2021 eligibility threshold.""}","{""eligible"": false, ""effective_eligibility_date"": ""2021-02-01"", ""claimable_interruption_months"": 9, ""reasoning"": ""Effective date 1 Feb 2021 is before the 1 Mar 2021 eligibility threshold.""}",False,2021-02-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:27:04+00:00,groq,openai/gpt-oss-20b,A07,C,arch_c_extraction,v1,dacd2790eabb1be34be3de775f21cee424a4a5d5dde35e10df1a78fcd88b9d2e,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Priya Nair was awarded her PhD on 1 May 2020. She subsequently had nine months of caring responsibilities for a dependent family member. The interruption was after PhD conferral and did not overlap with another interruption.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2020-05-01"",""interruptions"":[{""type"":""caring_responsibilities"",""duration_months"":9,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":null,""within_primary_carer_period"":null}]}","{""extracted_facts"": {""phd_award_date"": ""2020-05-01"", ""interruptions"": [{""type"": ""caring_responsibilities"", ""duration_months"": 9, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": null, ""within_primary_carer_period"": null}]}, ""rule_engine"": {""eligible"": false, ""effective_date"": ""2021-02-01"", ""claimable_months"": 9, ""trace"": [""PhD award date: 2020-05-01"", ""Interruption 1 (caring_responsibilities, 9 months stated): allowable; counted in full -> 9 claimable"", ""Total claimable months: 9"", ""Effective date: 2020-05-01 + 9 months = 2021-02-01"", ""2021-02-01 < threshold 2021-03-01: INELIGIBLE""]}}",False,2021-02-01,ok,,"PhD award date: 2020-05-01
+Interruption 1 (caring_responsibilities, 9 months stated): allowable; counted in full -> 9 claimable
+Total claimable months: 9
+Effective date: 2020-05-01 + 9 months = 2021-02-01
+2021-02-01 < threshold 2021-03-01: INELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:27:09+00:00,groq,openai/gpt-oss-20b,A08,A,arch_a_llm_only,v1,1d8b49e631c220143b9337ab8723997b5619c3af855ce8a858ee07c1ac24ff25,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Daniel Kim was awarded his PhD on 1 May 2020. He subsequently had ten months of caring responsibilities. The interruption was after PhD conferral and did not overlap with another interruption.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD was awarded on 1 May 2020.  
+He had a ten‑month period of caring responsibilities after the award, which is an allowable interruption.  
+Adding 10 calendar months to 1 May 2020 gives an effective award date of 1 March 2021.  
+Since the effective date is on or after 1 March 2021, the applicant meets the eligibility criterion.
+
+DECISION: ELIGIBLE  
+EFFECTIVE_DATE: 2021-03-01","{""decision"": ""ELIGIBLE"", ""effective_date"": ""2021-03-01""}",True,2021-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:27:13+00:00,groq,openai/gpt-oss-20b,A08,B,arch_b_llm_validation,v1,773a389a90df722939cb5f2fc34205ba60948210d9aa27704f1068a63fbab52d,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Daniel Kim was awarded his PhD on 1 May 2020. He subsequently had ten months of caring responsibilities. The interruption was after PhD conferral and did not overlap with another interruption.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":true,""effective_eligibility_date"":""2021-03-01"",""claimable_interruption_months"":10,""reasoning"":""10 months of caring responsibilities added to 1 May 2020 yields 1 March 2021, which meets the 1 March 2021 cutoff.""}","{""eligible"": true, ""effective_eligibility_date"": ""2021-03-01"", ""claimable_interruption_months"": 10, ""reasoning"": ""10 months of caring responsibilities added to 1 May 2020 yields 1 March 2021, which meets the 1 March 2021 cutoff.""}",True,2021-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:27:18+00:00,groq,openai/gpt-oss-20b,A08,C,arch_c_extraction,v1,a9d78d55e7343e14484745550feeb44b2d207b394dbbfec0245f5744449b285b,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Daniel Kim was awarded his PhD on 1 May 2020. He subsequently had ten months of caring responsibilities. The interruption was after PhD conferral and did not overlap with another interruption.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2020-05-01"",""interruptions"":[{""type"":""caring_responsibilities"",""duration_months"":10,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":null,""within_primary_carer_period"":null}]}","{""extracted_facts"": {""phd_award_date"": ""2020-05-01"", ""interruptions"": [{""type"": ""caring_responsibilities"", ""duration_months"": 10, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": null, ""within_primary_carer_period"": null}]}, ""rule_engine"": {""eligible"": true, ""effective_date"": ""2021-03-01"", ""claimable_months"": 10, ""trace"": [""PhD award date: 2020-05-01"", ""Interruption 1 (caring_responsibilities, 10 months stated): allowable; counted in full -> 10 claimable"", ""Total claimable months: 10"", ""Effective date: 2020-05-01 + 10 months = 2021-03-01"", ""2021-03-01 >= threshold 2021-03-01: ELIGIBLE""]}}",True,2021-03-01,ok,,"PhD award date: 2020-05-01
+Interruption 1 (caring_responsibilities, 10 months stated): allowable; counted in full -> 10 claimable
+Total claimable months: 10
+Effective date: 2020-05-01 + 10 months = 2021-03-01
+2021-03-01 >= threshold 2021-03-01: ELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:27:23+00:00,groq,openai/gpt-oss-20b,A09,A,arch_a_llm_only,v1,97205a2b9355256fc869594febbca28990ff0b7d2b3ecc7cbf8f7155f22b3503,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Olivia Smith was awarded her PhD on 15 August 2019. After conferral, she had six months of parental leave followed later by twelve months in a non-research position that was not concurrent with research employment. The periods did not overlap.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD was awarded on 15 August 2019.  
+She had two non‑overlapping allowable career interruptions after the award: 6 months of parental leave and 12 months in a non‑research position, for a total of 18 calendar months.  
+Adding 18 months to 15 August 2019 gives an effective PhD award date of 15 February 2021.  
+The eligibility threshold is 1 March 2021, so the effective date is earlier than the required date. Therefore the applicant is not eligible.
+
+DECISION: INELIGIBLE  
+EFFECTIVE_DATE: 2021-02-15","{""decision"": ""INELIGIBLE"", ""effective_date"": ""2021-02-15""}",False,2021-02-15,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:27:28+00:00,groq,openai/gpt-oss-20b,A09,B,arch_b_llm_validation,v1,99a9868ab10802c4553dd36d7c46e22f70bb4d54a09276fafe1b58f829901c5e,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Olivia Smith was awarded her PhD on 15 August 2019. After conferral, she had six months of parental leave followed later by twelve months in a non-research position that was not concurrent with research employment. The periods did not overlap.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":false,""effective_eligibility_date"":""2021-02-15"",""claimable_interruption_months"":18,""reasoning"":""Effective date 2021-02-15 is before 2021-03-01, so not eligible.""}","{""eligible"": false, ""effective_eligibility_date"": ""2021-02-15"", ""claimable_interruption_months"": 18, ""reasoning"": ""Effective date 2021-02-15 is before 2021-03-01, so not eligible.""}",False,2021-02-15,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:27:33+00:00,groq,openai/gpt-oss-20b,A09,C,arch_c_extraction,v1,6ed5b0871f064168a5a0687d3fced3bf5fcb53ad49521e575bac3da62e306b75,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Olivia Smith was awarded her PhD on 15 August 2019. After conferral, she had six months of parental leave followed later by twelve months in a non-research position that was not concurrent with research employment. The periods did not overlap.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2019-08-15"",""interruptions"":[{""type"":""parental_leave"",""duration_months"":6,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":null,""within_primary_carer_period"":null},{""type"":""non_research_position"",""duration_months"":12,""after_phd"":true,""concurrent_with_research_employment"":false,""dependent_children"":null,""within_primary_carer_period"":null}]}","{""extracted_facts"": {""phd_award_date"": ""2019-08-15"", ""interruptions"": [{""type"": ""parental_leave"", ""duration_months"": 6, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": null, ""within_primary_carer_period"": null}, {""type"": ""non_research_position"", ""duration_months"": 12, ""after_phd"": true, ""concurrent_with_research_employment"": false, ""dependent_children"": null, ""within_primary_carer_period"": null}]}, ""rule_engine"": {""eligible"": false, ""effective_date"": ""2021-02-15"", ""claimable_months"": 18, ""trace"": [""PhD award date: 2019-08-15"", ""Interruption 1 (parental_leave, 6 months stated): allowable; counted in full -> 6 claimable"", ""Interruption 2 (non_research_position, 12 months stated): allowable; counted in full -> 12 claimable"", ""Total claimable months: 18"", ""Effective date: 2019-08-15 + 18 months = 2021-02-15"", ""2021-02-15 < threshold 2021-03-01: INELIGIBLE""]}}",False,2021-02-15,ok,,"PhD award date: 2019-08-15
+Interruption 1 (parental_leave, 6 months stated): allowable; counted in full -> 6 claimable
+Interruption 2 (non_research_position, 12 months stated): allowable; counted in full -> 12 claimable
+Total claimable months: 18
+Effective date: 2019-08-15 + 18 months = 2021-02-15
+2021-02-15 < threshold 2021-03-01: INELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:27:38+00:00,groq,openai/gpt-oss-20b,A10,A,arch_a_llm_only,v1,0eb8ed61a5947b6f8b4992bf60c223b03e0af40739b598e98503fa043686eca6,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr James Wilson was awarded his PhD on 15 August 2019. After conferral, he had seven months of parental leave followed later by twelve months in a non-research position that was not concurrent with research employment. The periods did not overlap.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD was awarded on 15 August 2019.  
+He had two post‑award career interruptions that are allowable: 7 months of parental leave and 12 months in a non‑research position.  
+These periods do not overlap, so the total interruption time is 7 + 12 = 19 calendar months.  
+
+Adding 19 months to 15 August 2019 gives an effective PhD award date of 15 March 2021.  
+Since this date is on or after 1 March 2021, the applicant meets the eligibility criterion.
+
+DECISION: ELIGIBLE  
+EFFECTIVE_DATE: 2021-03-15","{""decision"": ""ELIGIBLE"", ""effective_date"": ""2021-03-15""}",True,2021-03-15,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:27:43+00:00,groq,openai/gpt-oss-20b,A10,B,arch_b_llm_validation,v1,d2c04bddebb9c2ca4b941e5c80f8989d54a72dada5bf0a362f0c98bcb9fb5831,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr James Wilson was awarded his PhD on 15 August 2019. After conferral, he had seven months of parental leave followed later by twelve months in a non-research position that was not concurrent with research employment. The periods did not overlap.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":true,""effective_eligibility_date"":""2021-03-15"",""claimable_interruption_months"":19,""reasoning"":""Parental leave 7 months + non-research 12 months = 19 months added to 15 Aug 2019 → 15 Mar 2021, which is after 1 Mar 2021.""}","{""eligible"": true, ""effective_eligibility_date"": ""2021-03-15"", ""claimable_interruption_months"": 19, ""reasoning"": ""Parental leave 7 months + non-research 12 months = 19 months added to 15 Aug 2019 → 15 Mar 2021, which is after 1 Mar 2021.""}",True,2021-03-15,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:27:48+00:00,groq,openai/gpt-oss-20b,A10,C,arch_c_extraction,v1,81975ea8f07255000a5f3e8e88291306c7d4fda981c601019176311e1ad1b667,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr James Wilson was awarded his PhD on 15 August 2019. After conferral, he had seven months of parental leave followed later by twelve months in a non-research position that was not concurrent with research employment. The periods did not overlap.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2019-08-15"",""interruptions"":[{""type"":""parental_leave"",""duration_months"":7,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":null,""within_primary_carer_period"":true},{""type"":""non_research_position"",""duration_months"":12,""after_phd"":true,""concurrent_with_research_employment"":false,""dependent_children"":null,""within_primary_carer_period"":null}]}","{""extracted_facts"": {""phd_award_date"": ""2019-08-15"", ""interruptions"": [{""type"": ""parental_leave"", ""duration_months"": 7, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": null, ""within_primary_carer_period"": true}, {""type"": ""non_research_position"", ""duration_months"": 12, ""after_phd"": true, ""concurrent_with_research_employment"": false, ""dependent_children"": null, ""within_primary_carer_period"": null}]}, ""rule_engine"": {""eligible"": false, ""effective_date"": ""2020-08-15"", ""claimable_months"": 12, ""trace"": [""PhD award date: 2019-08-15"", ""Interruption 1 (parental_leave, 7 months stated): parental leave within primary-carer period; not added -> 0 claimable"", ""Interruption 2 (non_research_position, 12 months stated): allowable; counted in full -> 12 claimable"", ""Total claimable months: 12"", ""Effective date: 2019-08-15 + 12 months = 2020-08-15"", ""2020-08-15 < threshold 2021-03-01: INELIGIBLE""]}}",False,2020-08-15,ok,,"PhD award date: 2019-08-15
+Interruption 1 (parental_leave, 7 months stated): parental leave within primary-carer period; not added -> 0 claimable
+Interruption 2 (non_research_position, 12 months stated): allowable; counted in full -> 12 claimable
+Total claimable months: 12
+Effective date: 2019-08-15 + 12 months = 2020-08-15
+2020-08-15 < threshold 2021-03-01: INELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:27:53+00:00,groq,openai/gpt-oss-20b,A11,A,arch_a_llm_only,v1,f43f4186363e90dd8b8c9d015ad16f5436aba92bae612db8728e6ea248c1c20e,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Sara Ahmed was awarded her PhD on 1 August 2020. After being awarded her PhD, she relocated internationally for work for five months.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD was awarded on 1 August 2020.  
+She had a five‑month international relocation after the award.  
+International relocation is allowable for up to three months per relocation, so only 3 months are counted.  
+Adding 3 months to 1 August 2020 gives an effective award date of 1 November 2020, which is before the eligibility threshold of 1 March 2021.  
+Therefore the applicant is not eligible.
+
+DECISION: INELIGIBLE  
+EFFECTIVE_DATE: 2020-11-01","{""decision"": ""INELIGIBLE"", ""effective_date"": ""2020-11-01""}",False,2020-11-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:27:57+00:00,groq,openai/gpt-oss-20b,A11,B,arch_b_llm_validation,v1,c3c0edb64bee26b037f68d2ff08ab4d6878942507b29a26974781f9550beb50a,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Sara Ahmed was awarded her PhD on 1 August 2020. After being awarded her PhD, she relocated internationally for work for five months.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":false,""effective_eligibility_date"":""2020-11-01"",""claimable_interruption_months"":3,""reasoning"":""International relocation counts 3 months; effective date 2020-11-01 is before 2021-03-01, so not eligible.""}","{""eligible"": false, ""effective_eligibility_date"": ""2020-11-01"", ""claimable_interruption_months"": 3, ""reasoning"": ""International relocation counts 3 months; effective date 2020-11-01 is before 2021-03-01, so not eligible.""}",False,2020-11-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:28:02+00:00,groq,openai/gpt-oss-20b,A11,C,arch_c_extraction,v1,2367335dafc435e1f115f3643922c50577916f41e8ed2fd1d599bb21897067df,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Sara Ahmed was awarded her PhD on 1 August 2020. After being awarded her PhD, she relocated internationally for work for five months.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2020-08-01"",""interruptions"":[{""type"":""international_relocation"",""duration_months"":5,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":null,""within_primary_carer_period"":null}]}","{""extracted_facts"": {""phd_award_date"": ""2020-08-01"", ""interruptions"": [{""type"": ""international_relocation"", ""duration_months"": 5, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": null, ""within_primary_carer_period"": null}]}, ""rule_engine"": {""eligible"": false, ""effective_date"": ""2020-11-01"", ""claimable_months"": 3, ""trace"": [""PhD award date: 2020-08-01"", ""Interruption 1 (international_relocation, 5 months stated): capped at 3 months per relocation -> 3 claimable"", ""Total claimable months: 3"", ""Effective date: 2020-08-01 + 3 months = 2020-11-01"", ""2020-11-01 < threshold 2021-03-01: INELIGIBLE""]}}",False,2020-11-01,ok,,"PhD award date: 2020-08-01
+Interruption 1 (international_relocation, 5 months stated): capped at 3 months per relocation -> 3 claimable
+Total claimable months: 3
+Effective date: 2020-08-01 + 3 months = 2020-11-01
+2020-11-01 < threshold 2021-03-01: INELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:28:07+00:00,groq,openai/gpt-oss-20b,A12,A,arch_a_llm_only,v1,7f6ab7264154b01935c38f9ecd18f427fc199b49a5d434cdb44a53e6e88b9c18,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Lucas Martin was awarded his PhD on 1 June 2020. He then had two separate international relocations, each lasting three months. The relocations did not overlap.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD was awarded on 1 June 2020.  
+He had two international relocations, each lasting 3 months, which are allowable interruptions.  
+These do not overlap, so the total interruption period is 3 + 3 = 6 months.  
+Adding 6 months to the award date gives an effective PhD award date of 1 December 2020.  
+Since 1 December 2020 is before the eligibility threshold of 1 March 2021, the applicant is not eligible.
+
+DECISION: INELIGIBLE  
+EFFECTIVE_DATE: 2020-12-01","{""decision"": ""INELIGIBLE"", ""effective_date"": ""2020-12-01""}",False,2020-12-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:28:12+00:00,groq,openai/gpt-oss-20b,A12,B,arch_b_llm_validation,v1,b79623e25cf8116580bcb2e71de4edf00feff225d8d70028f4c2b40784137d80,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Lucas Martin was awarded his PhD on 1 June 2020. He then had two separate international relocations, each lasting three months. The relocations did not overlap.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":false,""effective_eligibility_date"":""2020-12-01"",""claimable_interruption_months"":6,""reasoning"":""Effective date 6 months after PhD (international relocations) is 1 Dec 2020, before the 1 Mar 2021 eligibility threshold.""}","{""eligible"": false, ""effective_eligibility_date"": ""2020-12-01"", ""claimable_interruption_months"": 6, ""reasoning"": ""Effective date 6 months after PhD (international relocations) is 1 Dec 2020, before the 1 Mar 2021 eligibility threshold.""}",False,2020-12-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:28:17+00:00,groq,openai/gpt-oss-20b,A12,C,arch_c_extraction,v1,ee775154b113922c7a0410c910bbe2c34994cb5633d85bd7bb2a1f6ad23117ab,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Lucas Martin was awarded his PhD on 1 June 2020. He then had two separate international relocations, each lasting three months. The relocations did not overlap.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2020-06-01"",""interruptions"":[{""type"":""international_relocation"",""duration_months"":3,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":null,""within_primary_carer_period"":null},{""type"":""international_relocation"",""duration_months"":3,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":null,""within_primary_carer_period"":null}]}","{""extracted_facts"": {""phd_award_date"": ""2020-06-01"", ""interruptions"": [{""type"": ""international_relocation"", ""duration_months"": 3, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": null, ""within_primary_carer_period"": null}, {""type"": ""international_relocation"", ""duration_months"": 3, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": null, ""within_primary_carer_period"": null}]}, ""rule_engine"": {""eligible"": false, ""effective_date"": ""2020-12-01"", ""claimable_months"": 6, ""trace"": [""PhD award date: 2020-06-01"", ""Interruption 1 (international_relocation, 3 months stated): within cap -> 3 claimable"", ""Interruption 2 (international_relocation, 3 months stated): within cap -> 3 claimable"", ""Total claimable months: 6"", ""Effective date: 2020-06-01 + 6 months = 2020-12-01"", ""2020-12-01 < threshold 2021-03-01: INELIGIBLE""]}}",False,2020-12-01,ok,,"PhD award date: 2020-06-01
+Interruption 1 (international_relocation, 3 months stated): within cap -> 3 claimable
+Interruption 2 (international_relocation, 3 months stated): within cap -> 3 claimable
+Total claimable months: 6
+Effective date: 2020-06-01 + 6 months = 2020-12-01
+2020-12-01 < threshold 2021-03-01: INELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:28:21+00:00,groq,openai/gpt-oss-20b,A13,A,arch_a_llm_only,v1,7e52649454870e21fe834ad4f87830956c741b789c7282d621b8696100d08234,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Emily Jones was awarded her PhD on 1 January 2020. She was subsequently the primary carer of one dependent child for 24 months. She took parental leave for that child during this period.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD was awarded on 1 January 2020. She was the primary carer of one dependent child for 24 months, which is within the allowable two‑year limit for a single child. This period is counted as a career interruption, and any parental leave taken during it is already included, so no additional time is added. Adding 24 months to the award date gives an effective PhD award date of 1 January 2022, which is on or after 1 March 2021. Therefore the applicant is eligible.
+
+DECISION: ELIGIBLE
+EFFECTIVE_DATE: 2022-01-01","{""decision"": ""ELIGIBLE"", ""effective_date"": ""2022-01-01""}",True,2022-01-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:28:26+00:00,groq,openai/gpt-oss-20b,A13,B,arch_b_llm_validation,v1,39df06448ecd9211b91f74027b6abcdf7408ea072ff260aada2a381bec5ac346,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Emily Jones was awarded her PhD on 1 January 2020. She was subsequently the primary carer of one dependent child for 24 months. She took parental leave for that child during this period.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":true,""effective_eligibility_date"":""2022-01-01"",""claimable_interruption_months"":24,""reasoning"":""Primary carer period of 24 months is allowable and added to the 1 Jan 2020 award date, giving an effective date of 1 Jan 2022, which is after 1 Mar 2021.""}","{""eligible"": true, ""effective_eligibility_date"": ""2022-01-01"", ""claimable_interruption_months"": 24, ""reasoning"": ""Primary carer period of 24 months is allowable and added to the 1 Jan 2020 award date, giving an effective date of 1 Jan 2022, which is after 1 Mar 2021.""}",True,2022-01-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:28:31+00:00,groq,openai/gpt-oss-20b,A13,C,arch_c_extraction,v1,3e4c323716c1e70e0ab103a57619a7536878811e72703c155ae7897bc96ef58b,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Emily Jones was awarded her PhD on 1 January 2020. She was subsequently the primary carer of one dependent child for 24 months. She took parental leave for that child during this period.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2020-01-01"",""interruptions"":[{""type"":""primary_carer"",""duration_months"":24,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":1,""within_primary_carer_period"":null},{""type"":""parental_leave"",""duration_months"":null,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":null,""within_primary_carer_period"":true}]}","{""extracted_facts"": {""phd_award_date"": ""2020-01-01"", ""interruptions"": [{""type"": ""primary_carer"", ""duration_months"": 24, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": 1, ""within_primary_carer_period"": null}, {""type"": ""parental_leave"", ""duration_months"": null, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": null, ""within_primary_carer_period"": true}]}, ""rule_engine"": {""eligible"": true, ""effective_date"": ""2022-01-01"", ""claimable_months"": 24, ""trace"": [""PhD award date: 2020-01-01"", ""Interruption 1 (primary_carer, 24 months stated): within 24-month allowance -> 24 claimable"", ""Interruption 2 (parental_leave, None months stated): parental leave within primary-carer period; not added -> 0 claimable"", ""Total claimable months: 24"", ""Effective date: 2020-01-01 + 24 months = 2022-01-01"", ""2022-01-01 >= threshold 2021-03-01: ELIGIBLE""]}}",True,2022-01-01,ok,,"PhD award date: 2020-01-01
+Interruption 1 (primary_carer, 24 months stated): within 24-month allowance -> 24 claimable
+Interruption 2 (parental_leave, None months stated): parental leave within primary-carer period; not added -> 0 claimable
+Total claimable months: 24
+Effective date: 2020-01-01 + 24 months = 2022-01-01
+2022-01-01 >= threshold 2021-03-01: ELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:28:36+00:00,groq,openai/gpt-oss-20b,A14,A,arch_a_llm_only,v1,c05d3a740998e9fe88d0e7417ee02030a91bbadd8cfbd5f8349fc71cf32cc5f5,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Grace Lee was awarded her PhD on 1 January 2020. She was subsequently the primary carer of one dependent child for 24 months and took 12 months of parental leave during that period.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD was awarded on 1 January 2020.  
+She was the primary carer of one dependent child for 24 months. The 12 months of parental leave occurred within that primary‑carer period, so it is not added separately.  
+Thus the only allowable interruption is 24 months, which extends the effective award date to 1 January 2022.  
+Since 1 January 2022 is on or after 1 March 2021, the applicant meets the eligibility criterion.
+
+DECISION: ELIGIBLE  
+EFFECTIVE_DATE: 2022-01-01","{""decision"": ""ELIGIBLE"", ""effective_date"": ""2022-01-01""}",True,2022-01-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:28:40+00:00,groq,openai/gpt-oss-20b,A14,B,arch_b_llm_validation,v1,aaeca0d96333109be431550cdc6a507796119fce8753ee4668937796e6036fe0,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Grace Lee was awarded her PhD on 1 January 2020. She was subsequently the primary carer of one dependent child for 24 months and took 12 months of parental leave during that period.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":true,""effective_eligibility_date"":""2022-01-01"",""claimable_interruption_months"":24,""reasoning"":""Primary carer period of 24 months includes the 12‑month parental leave, so the effective award date is 1 Jan 2022, which is after 1 Mar 2021.""}","{""eligible"": true, ""effective_eligibility_date"": ""2022-01-01"", ""claimable_interruption_months"": 24, ""reasoning"": ""Primary carer period of 24 months includes the 12‑month parental leave, so the effective award date is 1 Jan 2022, which is after 1 Mar 2021.""}",True,2022-01-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:28:45+00:00,groq,openai/gpt-oss-20b,A14,C,arch_c_extraction,v1,71a084f7ea09f338e9147481b854fd1c57457f3821e584659ef3c7ba3af441d5,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Grace Lee was awarded her PhD on 1 January 2020. She was subsequently the primary carer of one dependent child for 24 months and took 12 months of parental leave during that period.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2020-01-01"",""interruptions"":[{""type"":""primary_carer"",""duration_months"":24,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":1,""within_primary_carer_period"":null},{""type"":""parental_leave"",""duration_months"":12,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":null,""within_primary_carer_period"":true}]}","{""extracted_facts"": {""phd_award_date"": ""2020-01-01"", ""interruptions"": [{""type"": ""primary_carer"", ""duration_months"": 24, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": 1, ""within_primary_carer_period"": null}, {""type"": ""parental_leave"", ""duration_months"": 12, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": null, ""within_primary_carer_period"": true}]}, ""rule_engine"": {""eligible"": true, ""effective_date"": ""2022-01-01"", ""claimable_months"": 24, ""trace"": [""PhD award date: 2020-01-01"", ""Interruption 1 (primary_carer, 24 months stated): within 24-month allowance -> 24 claimable"", ""Interruption 2 (parental_leave, 12 months stated): parental leave within primary-carer period; not added -> 0 claimable"", ""Total claimable months: 24"", ""Effective date: 2020-01-01 + 24 months = 2022-01-01"", ""2022-01-01 >= threshold 2021-03-01: ELIGIBLE""]}}",True,2022-01-01,ok,,"PhD award date: 2020-01-01
+Interruption 1 (primary_carer, 24 months stated): within 24-month allowance -> 24 claimable
+Interruption 2 (parental_leave, 12 months stated): parental leave within primary-carer period; not added -> 0 claimable
+Total claimable months: 24
+Effective date: 2020-01-01 + 24 months = 2022-01-01
+2022-01-01 >= threshold 2021-03-01: ELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:28:50+00:00,groq,openai/gpt-oss-20b,A15,A,arch_a_llm_only,v1,9d3515f2ea67c1b5ab9ea3d99cb2c3d72267bc8c89446289296353d32d640d7c,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Hannah Taylor was awarded her PhD on 1 March 2019. She was subsequently the primary carer of her first dependent child for 24 months, followed by a further 24 months as the primary carer of her second dependent child.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD was awarded on 1 March 2019.  
+She had two periods of primary‑carer responsibility, each lasting 24 months, which are allowable interruptions.  
+These periods are sequential, so the total allowable interruption is 24 + 24 = 48 months (4 years).  
+Adding 48 months to the award date gives an effective PhD award date of 1 March 2023, which is on or after 1 March 2021.  
+Therefore the applicant is eligible.
+
+DECISION: ELIGIBLE  
+EFFECTIVE_DATE: 2023-03-01","{""decision"": ""ELIGIBLE"", ""effective_date"": ""2023-03-01""}",True,2023-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:28:58+00:00,groq,openai/gpt-oss-20b,A15,B,arch_b_llm_validation,v1,a93b7c0e2b0c69f2cce9180b5778ab4ce3999766c1919eca20b3be363054218f,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Hannah Taylor was awarded her PhD on 1 March 2019. She was subsequently the primary carer of her first dependent child for 24 months, followed by a further 24 months as the primary carer of her second dependent child.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":true,""effective_eligibility_date"":""2023-03-01"",""claimable_interruption_months"":48,""reasoning"":""Primary carer periods total 48 months, added to PhD date gives 2023-03-01, which is after 2021-03-01, so eligible.""}","{""eligible"": true, ""effective_eligibility_date"": ""2023-03-01"", ""claimable_interruption_months"": 48, ""reasoning"": ""Primary carer periods total 48 months, added to PhD date gives 2023-03-01, which is after 2021-03-01, so eligible.""}",True,2023-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:29:03+00:00,groq,openai/gpt-oss-20b,A15,C,arch_c_extraction,v1,338cb912a1a7b15fa0b2a954e4391753ca75abd15046b1fd190c15a3a7f2d46d,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Hannah Taylor was awarded her PhD on 1 March 2019. She was subsequently the primary carer of her first dependent child for 24 months, followed by a further 24 months as the primary carer of her second dependent child.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2019-03-01"",""interruptions"":[{""type"":""primary_carer"",""duration_months"":24,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":1,""within_primary_carer_period"":null},{""type"":""primary_carer"",""duration_months"":24,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":1,""within_primary_carer_period"":null}]}","{""extracted_facts"": {""phd_award_date"": ""2019-03-01"", ""interruptions"": [{""type"": ""primary_carer"", ""duration_months"": 24, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": 1, ""within_primary_carer_period"": null}, {""type"": ""primary_carer"", ""duration_months"": 24, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": 1, ""within_primary_carer_period"": null}]}, ""rule_engine"": {""eligible"": true, ""effective_date"": ""2023-03-01"", ""claimable_months"": 48, ""trace"": [""PhD award date: 2019-03-01"", ""Interruption 1 (primary_carer, 24 months stated): within 24-month allowance -> 24 claimable"", ""Interruption 2 (primary_carer, 24 months stated): within 24-month allowance -> 24 claimable"", ""Total claimable months: 48"", ""Effective date: 2019-03-01 + 48 months = 2023-03-01"", ""2023-03-01 >= threshold 2021-03-01: ELIGIBLE""]}}",True,2023-03-01,ok,,"PhD award date: 2019-03-01
+Interruption 1 (primary_carer, 24 months stated): within 24-month allowance -> 24 claimable
+Interruption 2 (primary_carer, 24 months stated): within 24-month allowance -> 24 claimable
+Total claimable months: 48
+Effective date: 2019-03-01 + 48 months = 2023-03-01
+2023-03-01 >= threshold 2021-03-01: ELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:29:07+00:00,groq,openai/gpt-oss-20b,A16,A,arch_a_llm_only,v1,ae992e40a0918cd59a5be4916f737d5179eadc69635e6a9d2d32d5fd91bc2a90,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Michael Chen was awarded his PhD on 1 March 2019. He was subsequently the primary carer of one dependent child for 24 months, and had no other career interruptions.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s only career interruption was being the primary carer of one dependent child for 24 months, which is an allowable interruption. Adding 24 calendar months to the PhD award date of 1 March 2019 gives an effective award date of 1 March 2021. Since this date is on or after 1 March 2021, the applicant meets the eligibility criterion.
+
+DECISION: ELIGIBLE
+EFFECTIVE_DATE: 2021-03-01","{""decision"": ""ELIGIBLE"", ""effective_date"": ""2021-03-01""}",True,2021-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:29:12+00:00,groq,openai/gpt-oss-20b,A16,B,arch_b_llm_validation,v1,a05b7bf1c42cea4036dcc503810f1191d27d4562275f3c6e140c672f4c4da50c,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Michael Chen was awarded his PhD on 1 March 2019. He was subsequently the primary carer of one dependent child for 24 months, and had no other career interruptions.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":true,""effective_eligibility_date"":""2021-03-01"",""claimable_interruption_months"":24,""reasoning"":""Primary carer period of 24 months added to PhD award date 2019-03-01 gives effective date 2021-03-01, meeting eligibility.""}","{""eligible"": true, ""effective_eligibility_date"": ""2021-03-01"", ""claimable_interruption_months"": 24, ""reasoning"": ""Primary carer period of 24 months added to PhD award date 2019-03-01 gives effective date 2021-03-01, meeting eligibility.""}",True,2021-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:29:17+00:00,groq,openai/gpt-oss-20b,A16,C,arch_c_extraction,v1,21ba6d7364e290d09f933b2a6e48df2031506a21b9b40d93fde9e4eec3a8e5cd,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Michael Chen was awarded his PhD on 1 March 2019. He was subsequently the primary carer of one dependent child for 24 months, and had no other career interruptions.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2019-03-01"",""interruptions"":[{""type"":""primary_carer"",""duration_months"":24,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":1,""within_primary_carer_period"":null}]}","{""extracted_facts"": {""phd_award_date"": ""2019-03-01"", ""interruptions"": [{""type"": ""primary_carer"", ""duration_months"": 24, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": 1, ""within_primary_carer_period"": null}]}, ""rule_engine"": {""eligible"": true, ""effective_date"": ""2021-03-01"", ""claimable_months"": 24, ""trace"": [""PhD award date: 2019-03-01"", ""Interruption 1 (primary_carer, 24 months stated): within 24-month allowance -> 24 claimable"", ""Total claimable months: 24"", ""Effective date: 2019-03-01 + 24 months = 2021-03-01"", ""2021-03-01 >= threshold 2021-03-01: ELIGIBLE""]}}",True,2021-03-01,ok,,"PhD award date: 2019-03-01
+Interruption 1 (primary_carer, 24 months stated): within 24-month allowance -> 24 claimable
+Total claimable months: 24
+Effective date: 2019-03-01 + 24 months = 2021-03-01
+2021-03-01 >= threshold 2021-03-01: ELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:29:23+00:00,groq,openai/gpt-oss-20b,A17,A,arch_a_llm_only,v1,0f08275758137c5169c59d7b34564fe68f53443a5dbf272c03924e6ec1c270f6,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Isabella Rossi was awarded her PhD on 1 March 2019. She was subsequently the primary carer of one dependent child for 24 months and took 18 months of parental leave during that same period. The parental leave fell entirely within the primary-carer period.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD was awarded on 1 March 2019.  
+She was the primary carer of one dependent child for 24 months, and the 18 months of parental leave fell entirely within that period.  
+Because the parental leave is included in the primary‑carer period, only the 24 months of primary‑carer time are counted as an allowable interruption.  
+Adding 24 months to the award date gives an effective PhD award date of 1 March 2021.  
+The eligibility rule requires the effective date to be on or after 1 March 2021, so the applicant meets the criterion.
+
+DECISION: ELIGIBLE  
+EFFECTIVE_DATE: 2021-03-01","{""decision"": ""ELIGIBLE"", ""effective_date"": ""2021-03-01""}",True,2021-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:29:29+00:00,groq,openai/gpt-oss-20b,A17,B,arch_b_llm_validation,v1,81da684209d1f0a986047fb484bc87944d71e778db9109ab0847f4369cb4d270,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Isabella Rossi was awarded her PhD on 1 March 2019. She was subsequently the primary carer of one dependent child for 24 months and took 18 months of parental leave during that same period. The parental leave fell entirely within the primary-carer period.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":true,""effective_eligibility_date"":""2021-03-01"",""claimable_interruption_months"":24,""reasoning"":""Primary carer period of 24 months (including parental leave) extends PhD award to 1 Mar 2021, meeting the eligibility threshold.""}","{""eligible"": true, ""effective_eligibility_date"": ""2021-03-01"", ""claimable_interruption_months"": 24, ""reasoning"": ""Primary carer period of 24 months (including parental leave) extends PhD award to 1 Mar 2021, meeting the eligibility threshold.""}",True,2021-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:29:35+00:00,groq,openai/gpt-oss-20b,A17,C,arch_c_extraction,v1,aac19343af6d29c41a3c4b1f16e9c24ca86b8145997f2d156ae2a0bec14a85eb,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Isabella Rossi was awarded her PhD on 1 March 2019. She was subsequently the primary carer of one dependent child for 24 months and took 18 months of parental leave during that same period. The parental leave fell entirely within the primary-carer period.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2019-03-01"",""interruptions"":[{""type"":""primary_carer"",""duration_months"":24,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":1,""within_primary_carer_period"":null},{""type"":""parental_leave"",""duration_months"":18,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":null,""within_primary_carer_period"":true}]}","{""extracted_facts"": {""phd_award_date"": ""2019-03-01"", ""interruptions"": [{""type"": ""primary_carer"", ""duration_months"": 24, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": 1, ""within_primary_carer_period"": null}, {""type"": ""parental_leave"", ""duration_months"": 18, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": null, ""within_primary_carer_period"": true}]}, ""rule_engine"": {""eligible"": true, ""effective_date"": ""2021-03-01"", ""claimable_months"": 24, ""trace"": [""PhD award date: 2019-03-01"", ""Interruption 1 (primary_carer, 24 months stated): within 24-month allowance -> 24 claimable"", ""Interruption 2 (parental_leave, 18 months stated): parental leave within primary-carer period; not added -> 0 claimable"", ""Total claimable months: 24"", ""Effective date: 2019-03-01 + 24 months = 2021-03-01"", ""2021-03-01 >= threshold 2021-03-01: ELIGIBLE""]}}",True,2021-03-01,ok,,"PhD award date: 2019-03-01
+Interruption 1 (primary_carer, 24 months stated): within 24-month allowance -> 24 claimable
+Interruption 2 (parental_leave, 18 months stated): parental leave within primary-carer period; not added -> 0 claimable
+Total claimable months: 24
+Effective date: 2019-03-01 + 24 months = 2021-03-01
+2021-03-01 >= threshold 2021-03-01: ELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:29:42+00:00,groq,openai/gpt-oss-20b,A18,A,arch_a_llm_only,v1,e022cc8e3a8a3d2da895f66f5ca7c65d8a18f623d6f8de46018e32d33a31f3a8,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Noah Garcia was awarded his PhD on 1 March 2020. After conferral, he spent 12 months in a non-research position that was not concurrent with research employment.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD was awarded on 1 March 2020.  
+He had a 12‑month period in a non‑research position after the award, which is an allowable interruption.  
+Adding 12 calendar months to the award date gives an effective PhD award date of 1 March 2021, which is on or after the eligibility threshold of 1 March 2021.  
+Therefore the applicant is eligible.
+
+DECISION: ELIGIBLE  
+EFFECTIVE_DATE: 2021-03-01","{""decision"": ""ELIGIBLE"", ""effective_date"": ""2021-03-01""}",True,2021-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:29:50+00:00,groq,openai/gpt-oss-20b,A18,B,arch_b_llm_validation,v1,ebc877081801c93964e8e2576be7692283e91d5ef7c22d2c05f3a4b01615c0c1,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Noah Garcia was awarded his PhD on 1 March 2020. After conferral, he spent 12 months in a non-research position that was not concurrent with research employment.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":true,""effective_eligibility_date"":""2021-03-01"",""claimable_interruption_months"":12,""reasoning"":""12 months of non‑research employment after PhD extends the award date to 1 March 2021, meeting the eligibility threshold.""}","{""eligible"": true, ""effective_eligibility_date"": ""2021-03-01"", ""claimable_interruption_months"": 12, ""reasoning"": ""12 months of non‑research employment after PhD extends the award date to 1 March 2021, meeting the eligibility threshold.""}",True,2021-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:29:55+00:00,groq,openai/gpt-oss-20b,A18,C,arch_c_extraction,v1,a95df2298a99326fea47e5067db78d1893adf8c0b1c85b4347d225df042a5b30,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Noah Garcia was awarded his PhD on 1 March 2020. After conferral, he spent 12 months in a non-research position that was not concurrent with research employment.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2020-03-01"",""interruptions"":[{""type"":""non_research_position"",""duration_months"":12,""after_phd"":true,""concurrent_with_research_employment"":false,""dependent_children"":null,""within_primary_carer_period"":null}]}","{""extracted_facts"": {""phd_award_date"": ""2020-03-01"", ""interruptions"": [{""type"": ""non_research_position"", ""duration_months"": 12, ""after_phd"": true, ""concurrent_with_research_employment"": false, ""dependent_children"": null, ""within_primary_carer_period"": null}]}, ""rule_engine"": {""eligible"": true, ""effective_date"": ""2021-03-01"", ""claimable_months"": 12, ""trace"": [""PhD award date: 2020-03-01"", ""Interruption 1 (non_research_position, 12 months stated): allowable; counted in full -> 12 claimable"", ""Total claimable months: 12"", ""Effective date: 2020-03-01 + 12 months = 2021-03-01"", ""2021-03-01 >= threshold 2021-03-01: ELIGIBLE""]}}",True,2021-03-01,ok,,"PhD award date: 2020-03-01
+Interruption 1 (non_research_position, 12 months stated): allowable; counted in full -> 12 claimable
+Total claimable months: 12
+Effective date: 2020-03-01 + 12 months = 2021-03-01
+2021-03-01 >= threshold 2021-03-01: ELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:30:00+00:00,groq,openai/gpt-oss-20b,A19,A,arch_a_llm_only,v1,6b951caf2e49a4ea5b7975c91c2fafd7752a779edf2c59209c2929250a02180f,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Zoe Brown was awarded her PhD on 1 July 2020. After conferral, her research facility was inaccessible for eight months because of a workplace interruption, and she had limited or no access to the facilities and resources required for her research during that period.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The only interruption after the PhD award was an 8‑month period of limited or no access to research facilities, which is an allowable career interruption. Adding 8 calendar months to the award date of 1 July 2020 gives an effective award date of 1 March 2021, which meets the eligibility threshold.
+
+DECISION: ELIGIBLE
+EFFECTIVE_DATE: 2021-03-01","{""decision"": ""ELIGIBLE"", ""effective_date"": ""2021-03-01""}",True,2021-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:30:06+00:00,groq,openai/gpt-oss-20b,A19,B,arch_b_llm_validation,v1,1a502fb3a0a74820ba88772c541d8941737bdee8ff62ce04430413022cf32d48,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Zoe Brown was awarded her PhD on 1 July 2020. After conferral, her research facility was inaccessible for eight months because of a workplace interruption, and she had limited or no access to the facilities and resources required for her research during that period.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":true,""effective_eligibility_date"":""2021-03-01"",""claimable_interruption_months"":8,""reasoning"":""Eight months of limited access after PhD pushes effective date to 1 March 2021, meeting eligibility threshold.""}","{""eligible"": true, ""effective_eligibility_date"": ""2021-03-01"", ""claimable_interruption_months"": 8, ""reasoning"": ""Eight months of limited access after PhD pushes effective date to 1 March 2021, meeting eligibility threshold.""}",True,2021-03-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:30:12+00:00,groq,openai/gpt-oss-20b,A19,C,arch_c_extraction,v1,29287fb46ece21fdf3ff07e68f0f8db91543f5c3407fbd114c80726c78e586de,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Zoe Brown was awarded her PhD on 1 July 2020. After conferral, her research facility was inaccessible for eight months because of a workplace interruption, and she had limited or no access to the facilities and resources required for her research during that period.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2020-07-01"",""interruptions"":[{""type"":""limited_access_to_facilities"",""duration_months"":8,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":null,""within_primary_carer_period"":null}]}","{""extracted_facts"": {""phd_award_date"": ""2020-07-01"", ""interruptions"": [{""type"": ""limited_access_to_facilities"", ""duration_months"": 8, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": null, ""within_primary_carer_period"": null}]}, ""rule_engine"": {""eligible"": true, ""effective_date"": ""2021-03-01"", ""claimable_months"": 8, ""trace"": [""PhD award date: 2020-07-01"", ""Interruption 1 (limited_access_to_facilities, 8 months stated): allowable; counted in full -> 8 claimable"", ""Total claimable months: 8"", ""Effective date: 2020-07-01 + 8 months = 2021-03-01"", ""2021-03-01 >= threshold 2021-03-01: ELIGIBLE""]}}",True,2021-03-01,ok,,"PhD award date: 2020-07-01
+Interruption 1 (limited_access_to_facilities, 8 months stated): allowable; counted in full -> 8 claimable
+Total claimable months: 8
+Effective date: 2020-07-01 + 8 months = 2021-03-01
+2021-03-01 >= threshold 2021-03-01: ELIGIBLE"
+20261003T032528Z-6eba21,2026-10-03T03:30:17+00:00,groq,openai/gpt-oss-20b,A20,A,arch_a_llm_only,v1,11dc42978781444679f7aad8e287c02b2240f6c71faa8826f4c17b9e99f0a9ba,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Adam Wilson was awarded his PhD on 1 March 2020. Following a major disaster affecting his research location, he spent 11 months on disaster management and recovery activities. The interruption did not overlap with another interruption.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Explain your reasoning briefly, then finish your answer with exactly these two lines:
+DECISION: ELIGIBLE or INELIGIBLE
+EFFECTIVE_DATE: YYYY-MM-DD","The applicant’s PhD was awarded on 1 March 2020. He had an 11‑month disaster‑management interruption, which is an allowable interruption. Adding 11 calendar months to the award date gives an effective PhD award date of 1 February 2021. Eligibility requires the effective date to be on or after 1 March 2021, so the applicant does not meet the threshold.
+
+DECISION: INELIGIBLE
+EFFECTIVE_DATE: 2021-02-01","{""decision"": ""INELIGIBLE"", ""effective_date"": ""2021-02-01""}",False,2021-02-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:30:22+00:00,groq,openai/gpt-oss-20b,A20,B,arch_b_llm_validation,v1,2f6191ba16093f891c7e7f947b5a9a86441bb91e2b816c79951be06bac8320d6,You are an assessor of research-funding eligibility. Apply the eligibility rule exactly as written.,"Eligibility rule:
+An applicant is eligible if their effective PhD award date is on or after 1 March 2021.
+
+The effective PhD award date is the PhD award date, extended by the total duration of any allowable career interruptions, counted in calendar months.
+
+Only career interruptions that occurred after the PhD was awarded can be counted. Periods that overlap are counted only once.
+
+Allowable career interruptions:
+
+- Unemployment.
+- Illness or recovery from a medical condition.
+- Caring responsibilities for a dependent family member.
+- Parental leave.
+- Primary carer of a dependent child: up to two years per dependent child. This period includes any parental leave taken for that child; parental leave within the primary-carer period is not added to it.
+- Employment in a non-research position, only where the position was not concurrent with research employment.
+- International relocation: up to three months for each international relocation.
+- Limited or no access to the facilities and resources required for research.
+- Disaster management and recovery.
+
+Applicant profile:
+Dr Adam Wilson was awarded his PhD on 1 March 2020. Following a major disaster affecting his research location, he spent 11 months on disaster management and recovery activities. The interruption did not overlap with another interruption.
+
+Decide whether the applicant is eligible and determine their effective PhD award date.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""eligible"": true or false,
+  ""effective_eligibility_date"": ""YYYY-MM-DD"",
+  ""claimable_interruption_months"": integer,
+  ""reasoning"": ""short explanation""
+}","{""eligible"":false,""effective_eligibility_date"":""2021-02-01"",""claimable_interruption_months"":11,""reasoning"":""The 11‑month disaster‑management interruption extends the 1 March 2020 PhD award to 1 February 2021, which is before the 1 March 2021 eligibility threshold.""}","{""eligible"": false, ""effective_eligibility_date"": ""2021-02-01"", ""claimable_interruption_months"": 11, ""reasoning"": ""The 11‑month disaster‑management interruption extends the 1 March 2020 PhD award to 1 February 2021, which is before the 1 March 2021 eligibility threshold.""}",False,2021-02-01,ok,,
+20261003T032528Z-6eba21,2026-10-03T03:30:27+00:00,groq,openai/gpt-oss-20b,A20,C,arch_c_extraction,v1,0a98c258746cd5885cc4fae4e89a2b743408cc66471c67a545b1c4f78d0120b7,You are an information extraction component. Do not determine eligibility. Do not calculate the effective eligibility date. Do not decide whether the applicant is eligible.,"Applicant profile:
+Dr Adam Wilson was awarded his PhD on 1 March 2020. Following a major disaster affecting his research location, he spent 11 months on disaster management and recovery activities. The interruption did not overlap with another interruption.
+
+Extract the applicant's facts from the profile. Report only facts stated in the profile; use null when a fact is not stated.
+Respond with a single JSON object only, with exactly these fields:
+{
+  ""phd_award_date"": ""YYYY-MM-DD"",
+  ""interruptions"": [
+    {
+      ""type"": one of ""unemployment"", ""medical_condition"", ""caring_responsibilities"", ""parental_leave"", ""primary_carer"", ""non_research_position"", ""international_relocation"", ""limited_access_to_facilities"", ""disaster_management_and_recovery"", ""other"",
+      ""duration_months"": integer or null,
+      ""after_phd"": true, false or null (did the period occur after the PhD was awarded?),
+      ""concurrent_with_research_employment"": true, false or null (for non-research positions: was research employment continued at the same time?),
+      ""dependent_children"": integer or null (for primary-carer periods: number of dependent children the period covers),
+      ""within_primary_carer_period"": true, false or null (for parental leave: did it fall within a period in which the applicant was a primary carer?)
+    }
+  ]
+}
+List each separate period as its own entry. Use an empty list if the profile states there were no career interruptions.","{""phd_award_date"":""2020-03-01"",""interruptions"":[{""type"":""disaster_management_and_recovery"",""duration_months"":11,""after_phd"":true,""concurrent_with_research_employment"":null,""dependent_children"":null,""within_primary_carer_period"":null}]}","{""extracted_facts"": {""phd_award_date"": ""2020-03-01"", ""interruptions"": [{""type"": ""disaster_management_and_recovery"", ""duration_months"": 11, ""after_phd"": true, ""concurrent_with_research_employment"": null, ""dependent_children"": null, ""within_primary_carer_period"": null}]}, ""rule_engine"": {""eligible"": false, ""effective_date"": ""2021-02-01"", ""claimable_months"": 11, ""trace"": [""PhD award date: 2020-03-01"", ""Interruption 1 (disaster_management_and_recovery, 11 months stated): allowable; counted in full -> 11 claimable"", ""Total claimable months: 11"", ""Effective date: 2020-03-01 + 11 months = 2021-02-01"", ""2021-02-01 < threshold 2021-03-01: INELIGIBLE""]}}",False,2021-02-01,ok,,"PhD award date: 2020-03-01
+Interruption 1 (disaster_management_and_recovery, 11 months stated): allowable; counted in full -> 11 claimable
+Total claimable months: 11
+Effective date: 2020-03-01 + 11 months = 2021-02-01
+2021-02-01 < threshold 2021-03-01: INELIGIBLE"

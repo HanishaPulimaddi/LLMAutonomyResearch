@@ -1,0 +1,4 @@
+architecture,n,calls_ok,api_errors,format_validity,eligibility_correct,eligibility_accuracy,effective_date_correct,effective_date_accuracy,internal_consistency,month_consistency,phd_date_accuracy,interruption_accuracy,attribute_accuracy,fact_extraction_accuracy,replayable_rate,trace_type,disagreements,run_id,model
+A,20,20,0,1.0,20,1.0,20,1.0,1.0,,,,,,,free-text explanation only,0,20261003T032528Z-6eba21,openai/gpt-oss-20b
+B,20,20,0,1.0,20,1.0,20,1.0,1.0,1.0,,,,,,JSON with reasoning field and claimable months,0,20261003T032528Z-6eba21,openai/gpt-oss-20b
+C,20,20,0,1.0,19,0.95,19,0.95,,,1.0,1.0,0.95,0.95,1.0,extracted facts + deterministic step-by-step rule trace,1,20261003T032528Z-6eba21,openai/gpt-oss-20b

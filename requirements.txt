@@ -1,0 +1,6 @@
+# Python 3.10+ (tested with 3.14). Versions in comments are the ones the experiment was run with.
+pydantic>=2.0        # 2.12.5
+python-dotenv>=1.0   # 1.2.2
+groq                 # 1.7.0 (only needed when LLM_MODE=groq)
+matplotlib>=3.5      # 3.10.9 (figures only)
+numpy                # 2.4.4  (figures only)
